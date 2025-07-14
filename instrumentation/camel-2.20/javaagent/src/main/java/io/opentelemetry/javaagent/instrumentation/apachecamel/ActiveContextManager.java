@@ -50,7 +50,7 @@ class ActiveContextManager {
    */
   public static void activate(Context context, CamelRequest request) {
     Exchange exchange = request.getExchange();
-    ContextWithScope parent = exchange.getProperty(ACTIVE_CONTEXT_PROPERTY, ContextWithScope.class);
+    ContextWithScope parent = ((ContextWithScope)exchange.getProperty(ACTIVE_CONTEXT_PROPERTY));
     ContextWithScope contextWithScope = ContextWithScope.activate(parent, context, request);
     exchange.setProperty(ACTIVE_CONTEXT_PROPERTY, contextWithScope);
     logger.log(FINE, "Activated a span: {0}", contextWithScope);
@@ -65,7 +65,7 @@ class ActiveContextManager {
    */
   public static Context deactivate(Exchange exchange) {
     ContextWithScope contextWithScope =
-        exchange.getProperty(ACTIVE_CONTEXT_PROPERTY, ContextWithScope.class);
+        ((ContextWithScope)exchange.getProperty(ACTIVE_CONTEXT_PROPERTY));
 
     if (contextWithScope != null) {
       contextWithScope.deactivate(exchange.getException());
